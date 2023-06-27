@@ -1,0 +1,1 @@
+HEy hi i have wriiten data in sync manner into the text file using fs module package
