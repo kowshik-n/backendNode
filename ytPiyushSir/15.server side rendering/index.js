@@ -1,4 +1,5 @@
 const express = require("express");
+const app = express();
 const { connectToMongoDB } = require("./connect");
 const urlRoute = require("./routes/url");
 const URL = require("./models/url");
