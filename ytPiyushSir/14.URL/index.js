@@ -1,16 +1,19 @@
 const express = require("express");
-const urlRoute = require("./routes/urlRoutes");
-const { dbConnection } = require("./config");
-const URL = require("./models/urlModel");
+const { connectToMongoDB } = require("./connect");
+const urlRoute = require("./routes/url");
+const URL = require("./models/url");
+
 const app = express();
+const PORT = 8001;
 
-require("dotenv").config();
+connectToMongoDB("mongodb://localhost:27017/short-url").then(() =>
+  console.log("Mongodb connected")
+);
 
-const PORT = process.env.PORT || 3000;
-
-dbConnection(process.env.DATABASE_URL);
 app.use(express.json());
-app.use("/v1", urlRoute);
+
+app.use("/url", urlRoute);
+
 app.get("/:shortId", async (req, res) => {
   const shortId = req.params.shortId;
   const entry = await URL.findOneAndUpdate(
@@ -20,15 +23,12 @@ app.get("/:shortId", async (req, res) => {
     {
       $push: {
         visitHistory: {
-          timeStamp: Date.now(),
+          timestamp: Date.now(),
         },
       },
     }
   );
-
-  res.redirect(entry.redirectUrl);
+  res.redirect(entry.redirectURL);
 });
 
-app.listen(PORT, () => {
-  console.log("SErver started at 8001");
-});
+app.listen(PORT, () => console.log(`Server Started at PORT:${PORT}`));

@@ -4,16 +4,12 @@ const urlSchema = new mongoose.Schema(
   {
     shortId: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
     },
-    redirectUrl: {
+    redirectURL: {
       type: String,
-      require: true,
-    },
-    totalClicks: {
-      type: String,
-      require: true,
+      required: true,
     },
     visitHistory: [{ timestamp: { type: Number } }],
   },
@@ -21,4 +17,5 @@ const urlSchema = new mongoose.Schema(
 );
 
 const URL = mongoose.model("url", urlSchema);
+
 module.exports = URL;
