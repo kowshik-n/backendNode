@@ -1,5 +1,5 @@
 const shortid = require("shortid");
-const URL = require("../models/url");
+const URL = require("../models/urlModels");
 
 async function handleGenerateNewShortURL(req, res) {
   const body = req.body;
@@ -27,4 +27,5 @@ async function handleGetAnalytics(req, res) {
 module.exports = {
   handleGenerateNewShortURL,
   handleGetAnalytics,
+  redirect,
 };
