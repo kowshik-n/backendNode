@@ -7,15 +7,17 @@ const urlSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    redirectURL: {
+    redirectUrl: {
       type: String,
       required: true,
     },
-    visitHistory: [{ timestamp: { type: Number } }],
+    visitHistory: [{ timestamps: { type: Number } }],
   },
   { timestamps: true }
 );
 
-const URL = mongoose.model("url", urlSchema);
+const URL = mongoose.model("URL", urlSchema);
 
-module.exports = URL;
+module.exports = {
+  URL,
+};

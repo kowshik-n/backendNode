@@ -1,17 +1,33 @@
 const express = require("express");
+const { router } = require("./routes/urlRoutes");
+const { connectToMongodb } = require("./config");
+const { URL } = require("./models/urlModels");
 const app = express();
-const router = require("./routes/urlRoutes");
 
+const port = 8001;
+connectToMongodb("mongodb://127.0.0.1:27017/final-short").then(() => {
+  console.log("Mongo db connected");
+});
 app.use(express.json());
+app.use("/url", router);
 
-require("dotenv").config();
+app.get("/:shortIds", async (req, res) => {
+  const shortId = req.params.shortIds;
 
-const dbConnect = require("./config");
+  const entry = await URL.findOneAndUpdate(
+    { shortId },
+    {
+      $push: {
+        visitHistory: {
+          timestamp: Date.now(),
+        },
+      },
+    }
+  );
 
-dbConnect();
+  res.redirect(entry.redirectUrl);
+});
 
-app.use("/v1", router);
-
-app.listen(process.env.PORT, () => {
-  console.log("Port successfully connected");
+app.listen(port, () => {
+  console.log("Server strted at 8001");
 });
