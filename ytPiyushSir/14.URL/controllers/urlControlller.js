@@ -18,12 +18,24 @@ async function urlGenerateShortId(req, res) {
   });
 }
 
-async function redirec(req, res) {}
+async function redirec(req, res) {
+  const shortId = req.params.shortIds;
 
-async function fetchData(req, res) {}
+  const entry = await URL.findOneAndUpdate(
+    { shortId },
+    {
+      $push: {
+        visitHistory: {
+          timestamp: Date.now(),
+        },
+      },
+    }
+  );
+
+  res.redirect(entry.redirectUrl);
+}
 
 module.exports = {
   urlGenerateShortId,
   redirec,
-  fetchData,
 };
